@@ -13,8 +13,12 @@ import com.mdq.springjwt.repository.PhotoRepository;
 @Service
 public class PhotoService {
 
-	@Autowired
-    private PhotoRepository photoRepository;
+    private final PhotoRepository photoRepository;
+
+    @Autowired
+    public PhotoService(PhotoRepository photoRepository) {
+        this.photoRepository = photoRepository;
+    }
 	
 	public List<Photo> findAll() {return photoRepository.findAll();}
 

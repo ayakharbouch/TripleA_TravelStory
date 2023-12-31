@@ -37,7 +37,7 @@ public class CommentService {
 
     private final StoryRepository storyRepository;
 
-    // Inject repositories using constructor injection
+
 
     public List<Comment> findCommentsByStoryId(Long id) {
         Optional<Story> storyOptional = storyService.findById(id);
@@ -47,13 +47,12 @@ public class CommentService {
             List<Comment> comments = commentRepository.findByStory(story);
             return comments;
         } else {
-            // Handle the case where the story with the given id is not found
-            // You can throw an exception or return an empty list, depending on your requirements
-            return List.of(); // or throw new NotFoundException("Story not found with id: " + id);
+
+            return List.of();
         }
     }
 
-    // Inject repositories using constructor injection
+
 
    
     public CommentService(CommentRepository commentRepository, StoryRepository storyRepository) {

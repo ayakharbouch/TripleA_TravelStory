@@ -78,13 +78,13 @@ public class AuthController {
   private static final String ROLE_NOT_FOUND_ERROR = "Error: Role is not found.";
   @PostMapping("/signup")
   public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
-    }
+      boolean usernameExists = userRepository.existsByUsername(signUpRequest.getUsername());
+      boolean emailExists = userRepository.existsByEmail(signUpRequest.getEmail());
 
-    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-    }
+      if (usernameExists || emailExists) {
+        String errorMessage = usernameExists ? "Error: Username is already taken!" : "Error: Email is already in use!";
+        return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
+      }
 
     // Create new user's account
     User user = new User(signUpRequest.getUsername(), 

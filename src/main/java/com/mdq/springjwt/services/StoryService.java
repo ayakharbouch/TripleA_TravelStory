@@ -15,9 +15,12 @@ import com.mdq.springjwt.repository.StoryRepository;
 
 @Service
 public class StoryService {
+    private final StoryRepository storyRepository;
 
-	@Autowired
-    private StoryRepository storyRepository;
+    @Autowired
+    public StoryService(StoryRepository storyRepository) {
+        this.storyRepository = storyRepository;
+    }
 	
 	public List<Story> findAll() {return storyRepository.findAll();}
 
