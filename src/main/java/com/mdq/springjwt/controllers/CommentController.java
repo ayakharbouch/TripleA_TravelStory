@@ -30,8 +30,9 @@ public class CommentController {
 
 	@Autowired
 	public CommentController(CommentService commentService) {
+
 		this.commentService = commentService;
-	};
+	}
 
 	    @GetMapping("/")
 	    public List<Comment> findAll() {
