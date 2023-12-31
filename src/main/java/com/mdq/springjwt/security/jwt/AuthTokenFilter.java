@@ -20,14 +20,15 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.mdq.springjwt.security.services.UserDetailsServiceImpl;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
-  @Autowired
-  private JwtUtils jwtUtils;
-
-  @Autowired
-  private UserDetailsServiceImpl userDetailsService;
-
+  private final JwtUtils jwtUtils;
+  private final UserDetailsServiceImpl userDetailsService;
   private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
+  @Autowired
+  public AuthTokenFilter(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsService) {
+    this.jwtUtils = jwtUtils;
+    this.userDetailsService = userDetailsService;
+  }
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {

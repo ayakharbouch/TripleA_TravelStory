@@ -31,10 +31,14 @@ import java.util.UUID;
 @RequestMapping("/api/story")
 public class StoryController {
 
-	 @Autowired
-	    private StoryService storyService;
+	private final StoryService storyService;
 
-	    @GetMapping("/")
+	@Autowired
+	public StoryController(StoryService storyService) {
+		this.storyService = storyService;
+	}
+
+	@GetMapping("/")
 	    public List<Story> findAll() {
 	        return storyService.findAll();
 	    }

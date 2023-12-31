@@ -13,36 +13,26 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Story {
-	
+
 	 @Id
 	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 private Long storyId;
-	 
+
 	 private String title;
-	 
+
 	 private String content;
-	 
+
 	 private String image1;
-	 
+
 	 private String image2;
-	 
+
 	 private String image3;
-	 
+
 	 private String city;
 	 private String author;
 
 
-	 //@OneToMany(mappedBy = "story", fetch = FetchType.LAZY)
-	 //@ManyToOne
-	 //@JoinColumn(name = "photo_id")
-	 //private Photo photo; 
-	 
-	 //@ManyToOne
-	 //@JoinColumn(name = "comment_id")
-	 //private Comment comment;
-	 
-	 //@ManyToOne
-	 //@JoinColumn(name = "blogId") // Adjust this based on your actual column name
+
 
 	public Long getStoryId() {
 		return storyId;
@@ -84,12 +74,12 @@ public class Story {
 		this.content = content;
 	}
 
-	
+
 	public Story(Long storyId, String title, String content) {
 		this.storyId = storyId;
 		this.title = title;
 		this.content = content;
-		
+
 	}
 
 	public Story() {
@@ -158,9 +148,9 @@ public class Story {
 		this.image3 = image3;
 		this.city = city;
 		this.author = author;
-	} 
-	 
-	 
-	 
+	}
+
+
+
 
 }

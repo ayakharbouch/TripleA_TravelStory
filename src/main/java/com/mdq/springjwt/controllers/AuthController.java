@@ -36,23 +36,27 @@ import com.mdq.springjwt.security.services.UserDetailsImpl;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-  @Autowired
-  AuthenticationManager authenticationManager;
+  private final AuthenticationManager authenticationManager;
+  private final UserRepository userRepository;
+  private final RoleRepository roleRepository;
+  private final PasswordEncoder encoder;
+  private final JwtUtils jwtUtils;
 
   @Autowired
-  UserRepository userRepository;
-
-  @Autowired
-  RoleRepository roleRepository;
-
-  @Autowired
-  PasswordEncoder encoder;
-
-  @Autowired
-  JwtUtils jwtUtils;
-
+  public AuthController(
+          AuthenticationManager authenticationManager,
+          UserRepository userRepository,
+          RoleRepository roleRepository,
+          PasswordEncoder encoder,
+          JwtUtils jwtUtils) {
+    this.authenticationManager = authenticationManager;
+    this.userRepository = userRepository;
+    this.roleRepository = roleRepository;
+    this.encoder = encoder;
+    this.jwtUtils = jwtUtils;
+  }
   @PostMapping("/signin")
-  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+  public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
     Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -71,19 +75,15 @@ public class AuthController {
                          userDetails.getEmail(), 
                          roles));
   }
-
+  private static final String ROLE_NOT_FOUND_ERROR = "Error: Role is not found.";
   @PostMapping("/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+  public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-      return ResponseEntity
-          .badRequest()
-          .body(new MessageResponse("Error: Username is already taken!"));
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
     }
 
     if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-      return ResponseEntity
-          .badRequest()
-          .body(new MessageResponse("Error: Email is already in use!"));
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
     }
 
     // Create new user's account
@@ -93,31 +93,26 @@ public class AuthController {
 
     Set<String> strRoles = signUpRequest.getRole();
     Set<Role> roles = new HashSet<>();
-
+    Role defaultRole = roleRepository.findByName(ERole.ROLE_USER)
+            .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_ERROR));
     if (strRoles == null) {
-      Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-          .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-      roles.add(userRole);
+      roles.add(defaultRole);
     } else {
       strRoles.forEach(role -> {
+        Role currentRole;
         switch (role) {
         case "admin":
-          Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(adminRole);
-
+          currentRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                  .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_ERROR));
           break;
         case "mod":
-          Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(modRole);
-
+          currentRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                  .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_ERROR));
           break;
         default:
-          Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(userRole);
+          currentRole = defaultRole;
         }
+        roles.add(currentRole);
       });
     }
 

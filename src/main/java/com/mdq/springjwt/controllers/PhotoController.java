@@ -24,8 +24,12 @@ import com.mdq.springjwt.services.PhotoService;
 @RequestMapping("/api/photo")
 public class PhotoController {
 
-	 @Autowired
-	    private PhotoService photoService;
+	private final PhotoService photoService;
+
+	@Autowired
+	public PhotoController(PhotoService photoService) {
+		this.photoService = photoService;
+	}
 
 	    @GetMapping("/")
 	    public List<Photo> findAll() {

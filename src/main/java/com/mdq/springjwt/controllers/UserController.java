@@ -25,8 +25,12 @@ import com.mdq.springjwt.services.UserService;
 @RequestMapping("/api/user")
 public class UserController {
 
-	 @Autowired
-	    private UserService userService;
+	private final UserService userService;
+
+	@Autowired
+	public UserController(UserService userService) {
+		this.userService = userService;
+	}
 
 	    @GetMapping("/")
 	    public List<User> findAll() {

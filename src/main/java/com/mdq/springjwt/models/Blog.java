@@ -20,12 +20,12 @@ public class Blog {
 	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 private Long blogId;
 	 
-	 //@OneToMany(mappedBy = "blog", fetch = FetchType.LAZY)
+
 	 @ManyToOne
 	 @JoinColumn(name = "story_id")
 	 private Story story; 
 	 
-	 //@OneToMany(mappedBy = "blog", fetch = FetchType.LAZY)
+
 	 @ManyToOne
 	 @JoinColumn(name = "user_id")
 	 private User user;

@@ -21,8 +21,7 @@ public class Comment {
 	 private String text;
 	 private String commentator;
 
-	 //@ManyToOne
-	 //@JoinColumn(name = "story_id") // Adjust this based on your actual column name
+
 	 @ManyToOne
 	 @JoinColumn(name = "story_id")
 	 private Story story;

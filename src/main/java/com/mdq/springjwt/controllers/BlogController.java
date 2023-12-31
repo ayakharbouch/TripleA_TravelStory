@@ -24,9 +24,11 @@ import com.mdq.springjwt.services.BlogService;
 @RequestMapping("/api/blog")
 public class BlogController {
 
-	 @Autowired
-	    private BlogService blogService;
-
+	private final BlogService blogService;
+	@Autowired
+	public BlogController(BlogService blogService) {
+		this.blogService = blogService;
+	}
 	    @GetMapping("/")
 	    public List<Blog> findAll() {
 	        return blogService.findAll();

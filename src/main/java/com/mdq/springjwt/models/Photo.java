@@ -22,10 +22,7 @@ public class Photo {
 	  
 	  private String description;
 
-	  //@ManyToOne
-	  //@JoinColumn(name = "story_id") // Adjust this based on your actual column name
-	  //@OneToMany(mappedBy = "photo", fetch = FetchType.LAZY)
-	  //private List<Story> story;
+
 	  @ManyToOne
 	  @JoinColumn(name = "story_id")
 	  private Story story;

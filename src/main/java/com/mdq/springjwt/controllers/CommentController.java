@@ -26,9 +26,12 @@ import com.mdq.springjwt.services.CommentService;
 @CrossOrigin(origins = "http://localhost:3000/")
 @RequestMapping("/api/comment")
 public class CommentController {
+	private final CommentService commentService;
 
-	 @Autowired
-	    private CommentService commentService;
+	@Autowired
+	public CommentController(CommentService commentService) {
+		this.commentService = commentService;
+	};
 
 	    @GetMapping("/")
 	    public List<Comment> findAll() {
